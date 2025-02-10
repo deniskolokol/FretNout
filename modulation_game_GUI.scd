@@ -6,7 +6,7 @@
 // GUI variables
 var win;
 var transportCtrlGroup, volCtrlGroup, tempoCtrlGroup, patternsGroup;
-var startButton, pauseButton, stopButton;
+var startButton, stopButton; //pauseButton, ;
 var noteText, pattList, volumeSlider, tempoSlider;
 var patternsList=Array.new;
 var isPlaying = false, isPaused = false;
@@ -114,10 +114,13 @@ transportCtrlGroup = CompositeView(win, 350@50)
 .decorator_(FlowLayout(Rect(0, 0, 350, 50), margin@margin, margin@margin));
 
 startButton = Button(transportCtrlGroup, 80@30)
-.states_([["Start", Color.black, Color.green(0.7)]]);
+.states_([
+    ["Start", Color.black, Color.green(0.7)],
+    ["Pause", Color.black, Color.yellow(0.7)]
+]);
 
-pauseButton = Button(transportCtrlGroup, 80@30)
-.states_([["Pause", Color.black, Color.yellow(0.7)]]);
+// pauseButton = Button(transportCtrlGroup, 80@30)
+// .states_([["Pause", Color.black, Color.yellow(0.7)]]);
 
 stopButton = Button(transportCtrlGroup, 80@30)
 .states_([["Stop", Color.white, Color.red(0.7)]]);
@@ -141,33 +144,42 @@ tClock = TempoClock.new;
 // Warning: server must be running!
 s.waitForBoot({
     // GUI elements actions.
-    startButton.action_({
-        win.bounds.postln;
-
-        // restart the task
-        task.start(tClock);
-
-        // restart the pattern
-        if (~players_patt.isNil) {
+    startButton.action_({ |bt|
+        var startPlaying = {
+            task.start(tClock);
             ~mod_player = ~players_patt.play(tClock);
-        }{
-            if (~mod_player.isPlaying.not) {
-                ~mod_player = ~players_patt.play(tClock);
+        };
+        var resumePlaying = {
+            task.resume(tClock);
+            ~mod_player.resume(tClock);
+        };
+        if (bt.value == 1) {
+            // (re)start the task and the pattern
+            if (~mod_player.isNil) {
+                startPlaying.()
             } {
-                ~mod_player.reset;
-                ~mod_player.resume;
+                if (~mod_player.isPlaying.not) {
+                    startPlaying.()
+                } {
+                    resumePlaying.()
+                }
             }
+        } {
+            // pause
+            "pause...".postln;
+            task.pause;
+            if (~mod_player.isNil.not) { ~mod_player.pause };
         }
-    });
-
-    pauseButton.action_({
-        task.pause;
-        if (~mod_player.isNil.not) { ~mod_player.pause };
     });
 
     stopButton.action_({
         task.stop;
-        if (~mod_player.isNil.not) { ~mod_player.stop };
+        task.reset;
+        if (~mod_player.isNil.not) {
+            ~mod_player.stop;
+            ~mod_player.reset;
+        };
+        startButton.value = 0;
     });
 
     volumeSlider.action_({ |sl|

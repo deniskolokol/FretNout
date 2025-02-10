@@ -72,7 +72,7 @@ s.waitForBoot({
             \instrument, \fm,
             \dur, 1/4,
             \midinote,Pseq([
-                Pseq([ Plazy({[~tonic,   ~tonic+12]}) ], 32),
+                Pseq([ Plazy({[~tonic,   ~tonic+12]}) ], 4),
                 Pseq([ Plazy({[~tonic,   ~tonic+ 8]}) ], 24),
                 Pseq([ Plazy({[~tonic+5, ~tonic+17]}) ], 8),
             ], inf)
