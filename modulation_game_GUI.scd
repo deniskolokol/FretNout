@@ -125,11 +125,10 @@ startButton = Button(transportCtrlGroup, 80@30)
 stopButton = Button(transportCtrlGroup, 80@30)
 .states_([["Stop", Color.white, Color.red(0.7)]]);
 
-
 // Task that changes pitch every barsPerChange bars.
 task = Task({
     inf.do({ |i|
-        // Play notes for 8 bars
+        // Play notes for ~barsPerChange
         ~tonic = rrand(\E1.namemidi.asInteger, \G2.namemidi.asInteger);
         postf("% - %\n", ~tonic, ~tonic.midiname);
         { noteText.string_(~tonic.midiname) }.defer;
@@ -153,6 +152,7 @@ s.waitForBoot({
             task.resume(tClock);
             ~mod_player.resume(tClock);
         };
+
         if (bt.value == 1) {
             // (re)start the task and the pattern
             if (~mod_player.isNil) {
@@ -166,7 +166,6 @@ s.waitForBoot({
             }
         } {
             // pause
-            "pause...".postln;
             task.pause;
             if (~mod_player.isNil.not) { ~mod_player.pause };
         }

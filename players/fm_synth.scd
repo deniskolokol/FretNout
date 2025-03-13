@@ -72,11 +72,11 @@ s.waitForBoot({
             \instrument, \fm,
             \dur, 1/4,
             \midinote,Pseq([
-                Pseq([ Plazy({[~tonic,   ~tonic+12]}) ], 4),
-                Pseq([ Plazy({[~tonic,   ~tonic+ 8]}) ], 24),
-                Pseq([ Plazy({[~tonic+5, ~tonic+17]}) ], 8),
+                Pseq([ Plazy({~tonic + [0, 5]}) ], 32),
+                Pseq([ Plazy({~tonic + [0, 7]}) ], 24),
+                Pseq([ Plazy({~tonic + [5, 17]}) ], 8),
             ], inf)
-            + Pwrand([0, 12], [0.9, 0.1], inf),
+            + Pwrand([-12, 0, 12], [0.2, 0.7, 0.1], inf),
             \mRatio, 2,
             \index, 1.5,
             \iScale, Pseq([3,2.5,2,1],inf),
@@ -89,27 +89,28 @@ s.waitForBoot({
             \fxsend, -20,
         ),
 
-        //lead
-        Pbind(
-            \instrument, \fm,
-            \dur, 1/4,
-            \midinote, Pseq([Pfin(
-                40,
-                Plazy({~tonic + Pseq([12, 15, 17, 19, 22, 24], inf)})
-            )], inf),
-            \mRatio, Pwrand([0.5, 1.5, 2, 3], [1, 3, 6, 25].normalizeSum, inf),
-            \index, Pexprand(2, 2.5),
-            \iScale, Pseq([Pgeom(1.2, 1.2, 6)], inf),
-            \atk, Pwrand([0, Pexprand(0.02, 0.1, 1)], [0.99, 0.01], inf),
-            \rel, Pseq(Array.interpolation(64, 0.03, 0.25).mirror2, inf),
-            \cAtk, 1,
-            \cRel, Pseq(Array.interpolation(64, -4, 3).mirror2, inf),
-            \amp, Pseq([Pfin(54, Pseq([Pgeom(0.13, -5.dbamp, 7)], inf))], inf),
-            \pan, Pseq(Array.interpolation(64, 0, 1).lincurve(0, 1, 0, 1, 8), inf) * Pseq([1, -1], inf),
-            \out, 0,
-            \fx, ~vbus,
-            \fxsend, -15,
-        ),
+        // //lead
+        // Pbind(
+        //     \instrument, \fm,
+        //     \dur, 1/4,
+        //     \midinote, Pseq([Pfin(
+        //         40,
+        //         Plazy({~tonic + Pseq([ 0, 3, 5, 7, 10, 12 ], inf)})
+        //         // Plazy({~tonic + Pseq([12, 15, 17, 19, 22, 24], inf)})
+        //     )], inf),
+        //     \mRatio, Pwrand([0.5, 1.5, 2, 3], [1, 3, 6, 25].normalizeSum, inf),
+        //     \index, Pexprand(2, 2.5),
+        //     \iScale, Pseq([Pgeom(1.2, 1.2, 6)], inf),
+        //     \atk, Pwrand([0, Pexprand(0.02, 0.1, 1)], [0.99, 0.01], inf),
+        //     \rel, Pseq(Array.interpolation(64, 0.03, 0.25).mirror2, inf),
+        //     \cAtk, 1,
+        //     \cRel, Pseq(Array.interpolation(64, -4, 3).mirror2, inf),
+        //     \amp, Pseq([Pfin(54, Pseq([Pgeom(0.13, -5.dbamp, 7)], inf))], inf),
+        //     \pan, Pseq(Array.interpolation(64, 0, 1).lincurve(0, 1, 0, 1, 8), inf) * Pseq([1, -1], inf),
+        //     \out, 0,
+        //     \fx, ~vbus,
+        //     \fxsend, -15,
+        // ),
 
         //pad
         Pbind(
