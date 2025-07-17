@@ -6,7 +6,7 @@
 // GUI variables
 var win;
 var transportCtrlGroup, volCtrlGroup, tempoCtrlGroup, patternsGroup;
-var startButton, stopButton; //pauseButton, ;
+var startButton, stopButton, pauseButton;
 var noteText, pattList, volumeSlider, tempoSlider;
 var patternsList=Array.new;
 var isPlaying = false, isPaused = false;
@@ -24,7 +24,7 @@ var dirPlayers = PathName(dirCurrent +/+ "players");
 
 
 // -- ENVIRONMENT --
-~tonic = \A1.namemidi;
+~tonic = "a 1".notemidi.asInteger;
 ~srvVol = Server.default.volume.volume;
 
 // -- GUI --
@@ -119,8 +119,8 @@ startButton = Button(transportCtrlGroup, 80@30)
     ["Pause", Color.black, Color.yellow(0.7)]
 ]);
 
-// pauseButton = Button(transportCtrlGroup, 80@30)
-// .states_([["Pause", Color.black, Color.yellow(0.7)]]);
+pauseButton = Button(transportCtrlGroup, 80@30)
+.states_([["Pause", Color.black, Color.yellow(0.7)]]);
 
 stopButton = Button(transportCtrlGroup, 80@30)
 .states_([["Stop", Color.white, Color.red(0.7)]]);
@@ -129,7 +129,7 @@ stopButton = Button(transportCtrlGroup, 80@30)
 task = Task({
     inf.do({ |i|
         // Play notes for ~barsPerChange
-        ~tonic = rrand(\E1.namemidi.asInteger, \G2.namemidi.asInteger);
+		~tonic = rrand("e 1".notemidi.asInteger, "g 2".notemidi.asInteger);
         postf("% - %\n", ~tonic, ~tonic.midiname);
         { noteText.string_(~tonic.midiname) }.defer;
         (~barsPerChange * ~beatsPerBar).wait;
