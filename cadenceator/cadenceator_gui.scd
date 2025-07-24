@@ -152,7 +152,11 @@ var colorBg=Color.grey(0.15);
 
         ~seq = ~getSequence.(~tonic, ~chordType);
         ~rootChord = ~seq[0];
+
+        // Clean up the hint on the previous sequence and the static text
         stHint.string = "";
+        txtSolution.string = "";
+
         stScale.string = format(
             "% - %, inversion: %\n%\n",
             ~formatNote.(~rootChord.tonic),
@@ -208,6 +212,21 @@ var colorBg=Color.grey(0.15);
     .stringColor_(Color.gray(0.6))
     .align_(\left)
     .font_(Font("Monaco", 20));
+
+    var stLabel = StaticText(paneR, paneR.bounds.width@50)
+    .stringColor_(Color.white)
+    .align_(\left)
+    .font_(Font("Monaco", 12))
+    .string_("Enter your solution here (e.g. C major C minor D minor E major G minor) and press Enter to check it.");
+
+    var txtSolution = TextField(paneR, paneR.bounds.width@690)
+    .font_(Font("Monaco", 20))
+    .align_(\topLeft)
+    .string_("") // Start with empty string
+    .action_({ |tf|
+        // TODO: Check the solution against the generated sequence
+        nil
+    });
 };
 
 
